@@ -169,45 +169,33 @@ modules:
         localUrl: localhost:5010
         url: identity-service
 
-  vehicles:
-    path: vehicles
+  localisation:
+    path: localisation
     routes:
       - upstream: /
         method: GET
         use: downstream
-        downstream: vehicles-service/vehicles
+        downstream: localisation-service/locations
         auth: true
         onSuccess:
           data: response.data.items
 
-      - upstream: /{vehicleId}
+      - upstream: /{locationId}
         method: GET
         use: downstream
-        downstream: vehicles-service/vehicles/{vehicleId}
+        downstream: localisation-service/locations/{locationId}
         auth: true
 
       - upstream: /
         method: POST
         use: downstream
-        downstream: vehicles-service/vehicles
+        downstream: localisation-service/locations
         auth: true
         resourceId:
-          property: vehicleId
+          property: locationId
           generate: true
-
-      - upstream: /{vehicleId}
-        method: PUT
-        use: downstream
-        downstream: vehicles-service/vehicles/{vehicleId}
-        auth: true
-
-      - upstream: /{vehicleId}
-        method: DELETE
-        use: downstream
-        downstream: vehicles-service/vehicles/{vehicleId}
-        auth: true
 
     services:
       vehicles-service:
-        localUrl: localhost:5009
-        url: vehicles-service
+        localUrl: localhost:5011
+        url: localisation-service

@@ -170,4 +170,33 @@ modules:
         url: identity-service
       
       
- 
+  localisation:
+    path: localisation
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: localisation-service/locations
+        auth: true
+        onSuccess:
+          data: response.data.items
+
+      - upstream: /{locationId}
+        method: GET
+        use: downstream
+        downstream: localisation-service/locations/{locationId}
+        auth: true
+
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: localisation-service/locations
+        auth: true
+        resourceId:
+          property: locationId
+          generate: true
+
+    services:
+      vehicles-service:
+        localUrl: ubuntu-docker-host:5011
+        url: localisation-service
