@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4DBCDA53-D4CD-4B80-BAF8-A6E66C494BED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{71409443-A32A-4446-9AC8-F0BB47BCB460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.ApiGateway.Api", "src\Services.ApiGateway.Api\Services.ApiGateway.Api.csproj", "{65E0A4C1-D0C1-4A3A-B579-A64143CE2850}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65E0A4C1-D0C1-4A3A-B579-A64143CE2850} = {4DBCDA53-D4CD-4B80-BAF8-A6E66C494BED}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65E0A4C1-D0C1-4A3A-B579-A64143CE2850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65E0A4C1-D0C1-4A3A-B579-A64143CE2850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65E0A4C1-D0C1-4A3A-B579-A64143CE2850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65E0A4C1-D0C1-4A3A-B579-A64143CE2850}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
