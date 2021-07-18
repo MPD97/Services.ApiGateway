@@ -1,0 +1,173 @@
+auth:
+  enabled: true
+  global: false
+  claims:
+    role: http://schemas.microsoft.com/ws/2008/06/identity/claims/role
+
+http:
+  retries: 2
+  interval: 2.0
+  exponential: true
+
+useForwardedHeaders: true
+passQueryString: true
+forwardRequestHeaders: true
+forwardResponseHeaders: true
+generateRequestId: true
+generateTraceId: true
+useLocalUrl: true
+loadBalancer:
+  enabled: false
+  url: ubuntu-docker-host:9999
+
+extensions:
+  customErrors:
+    includeExceptionMessage: true
+
+  cors:
+    allowCredentials: true
+    allowedOrigins:
+      - '*'
+    allowedMethods:
+      - post
+      - put
+      - delete
+    allowedHeaders:
+      - '*'
+    exposedHeaders:
+      - Request-ID
+      - Resource-ID
+      - Trace-ID
+      - Total-Count
+
+  jwt:
+    issuerSigningKey: eiquief5phee9pazo0Faegaez9gohThailiur5woy2befiech1oarai4aiLi6ahVecah3ie9Aiz6Peij
+    validIssuer: organisation
+    validateAudience: false
+    validateIssuer: false
+    validateLifetime: true
+
+  swagger:
+    name: Thesis
+    reDocEnabled: false
+    title: Thesis API
+    version: v1
+    routePrefix: docs
+    includeSecurity: true
+
+  tracing:
+    serviceName: api-gateway
+    udpHost: ubuntu-docker-host
+    udpPort: 6831
+    maxPacketSize: 0
+    sampler: const
+    useEmptyTracer: false
+
+modules:
+  home:
+    routes:
+      - upstream: /
+        method: GET
+        use: return_value
+        returnValue: Welcome to Thesis API! 
+        
+  users:
+    path: users
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: users-service/users
+        auth: true
+        claims:
+          role: admin
+    
+      - upstream: /me
+        method: GET
+        use: downstream
+        downstream: users-service/users/@user_id
+        auth: true
+    
+      - upstream: /{userId}
+        method: GET
+        use: downstream
+        downstream: users-service/users/{userId}
+        auth: true
+        claims:
+          role: admin
+    
+      - upstream: /{userId}/state
+        method: GET
+        use: downstream
+        downstream: users-service/users/{userId}/state
+        auth: true
+        claims:
+          role: admin
+    
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: users-service/users
+        bind:
+          - userId:@user_id
+        auth: true
+        payload: create_user
+        schema: create_user.schema
+    
+      - upstream: /{userId}/state/{state}
+        method: PUT
+        use: downstream
+        downstream: users-service/users/{userId}/state/{state}
+        bind:
+          - userId:{userId}
+          - state:{state}
+        auth: true
+        claims:
+          role: admin
+    
+    services:
+      users-service:
+        localUrl: ubuntu-docker-host:5012
+        url: users-service
+      
+  identity:
+    path: identity
+    routes:
+      - upstream: /users/{userId}
+        method: GET
+        use: downstream
+        downstream: identity-service/users/{userId}
+        auth: true
+        claims:
+          role: admin
+    
+      - upstream: /me
+        method: GET
+        use: downstream
+        downstream: identity-service/me
+        auth: true
+    
+      - upstream: /sign-up
+        method: POST
+        use: downstream
+        downstream: identity-service/sign-up
+        auth: false
+        resourceId:
+          property: userId
+          generate: true
+    
+      - upstream: /sign-in
+        method: POST
+        use: downstream
+        downstream: identity-service/sign-in
+        auth: false
+        responseHeaders:
+          content-type: application/json
+    
+    services:
+      identity-service:
+        localUrl: ubuntu-docker-host:5010
+        url: identity-service
+      
+      
+ 
