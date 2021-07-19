@@ -17,5 +17,14 @@
         <PackageReference Include="Ntrada.Extensions.Swagger" Version="0.4.*" />
         <PackageReference Include="Ntrada.Extensions.Tracing" Version="0.4.*" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="ntrada.local_docker.yml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="ntrada.remote.yml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
     
 </Project>

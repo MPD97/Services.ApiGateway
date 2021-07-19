@@ -1,0 +1,71 @@
+
+# Api gateway
+@api = http://ubuntu-docker-host:5009 
+
+### At first, create an account
+POST {{api}}/identity/sign-up
+Content-Type: application/json
+
+{
+  "email": "scenario-user1@domain.com",
+  "password": "secret",
+  "role": "user"
+}
+
+### Authenticate and grab the access token
+# @name sign_in
+POST {{api}}/sign-in
+Content-Type: application/json
+
+{
+  "email": "scenario-user1@domain.com",
+  "password": "secret"
+}
+
+### Get your user account details
+# @name me
+@accessToken = {{sign_in.response.body.$.accessToken}}
+@refreshToken = {{sign_in.response.body.$.refreshToken}}
+GET {{api}}/me
+Authorization: Bearer {{accessToken}}
+
+
+
+### Complete the customer registration process
+@userId = {{me.response.body.$.id}}
+POST http://ubuntu-docker-host:5012/users
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "fullName": "John Doe",
+  "address": "New York"
+}
+
+### Revoke access token
+POST {{api}}/access-tokens/revoke
+Content-Type: application/json
+
+{
+  "accesstoken": "{{accessToken}}"
+}
+
+### Renew access token using refresh token
+# @name renew
+POST {{api}}/refresh-tokens/use
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+
+### Revoke refresh token
+@refreshToken = {{renew.response.body.$.refreshToken}}
+POST {{api}}/refresh-tokens/revoke
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}

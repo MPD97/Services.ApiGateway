@@ -169,8 +169,8 @@ modules:
         localUrl: localhost:5010
         url: identity-service
 
-  localisation:
-    path: localisation
+  locations:
+    path: locations
     routes:
       - upstream: /
         method: GET
@@ -196,6 +196,6 @@ modules:
           generate: true
 
     services:
-      vehicles-service:
+      localisation-service:
         localUrl: localhost:5011
         url: localisation-service

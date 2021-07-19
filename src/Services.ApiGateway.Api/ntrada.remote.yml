@@ -77,7 +77,7 @@ modules:
       - upstream: /
         method: GET
         use: downstream
-        downstream: users-service/users
+        downstream: users/users
         auth: true
         claims:
           role: admin
@@ -85,13 +85,13 @@ modules:
       - upstream: /me
         method: GET
         use: downstream
-        downstream: users-service/users/@user_id
+        downstream: users/users/@user_id
         auth: true
     
       - upstream: /{userId}
         method: GET
         use: downstream
-        downstream: users-service/users/{userId}
+        downstream: users/users/{userId}
         auth: true
         claims:
           role: admin
@@ -99,7 +99,7 @@ modules:
       - upstream: /{userId}/state
         method: GET
         use: downstream
-        downstream: users-service/users/{userId}/state
+        downstream: users/users/{userId}/state
         auth: true
         claims:
           role: admin
@@ -107,7 +107,7 @@ modules:
       - upstream: /
         method: POST
         use: downstream
-        downstream: users-service/users
+        downstream: users/users
         bind:
           - userId:@user_id
         auth: true
@@ -117,7 +117,7 @@ modules:
       - upstream: /{userId}/state/{state}
         method: PUT
         use: downstream
-        downstream: users-service/users/{userId}/state/{state}
+        downstream: users/users/{userId}/state/{state}
         bind:
           - userId:{userId}
           - state:{state}
@@ -126,9 +126,9 @@ modules:
           role: admin
     
     services:
-      users-service:
+      users:
         localUrl: ubuntu-docker-host:5012
-        url: users-service
+        url: users
       
   identity:
     path: identity
@@ -136,7 +136,7 @@ modules:
       - upstream: /users/{userId}
         method: GET
         use: downstream
-        downstream: identity-service/users/{userId}
+        downstream: identity/users/{userId}
         auth: true
         claims:
           role: admin
@@ -144,13 +144,13 @@ modules:
       - upstream: /me
         method: GET
         use: downstream
-        downstream: identity-service/me
+        downstream: identity/me
         auth: true
     
       - upstream: /sign-up
         method: POST
         use: downstream
-        downstream: identity-service/sign-up
+        downstream: identity/sign-up
         auth: false
         resourceId:
           property: userId
@@ -159,15 +159,15 @@ modules:
       - upstream: /sign-in
         method: POST
         use: downstream
-        downstream: identity-service/sign-in
+        downstream: identity/sign-in
         auth: false
         responseHeaders:
           content-type: application/json
     
     services:
-      identity-service:
+      identity:
         localUrl: ubuntu-docker-host:5010
-        url: identity-service
+        url: identity
       
       
   localisation:
@@ -176,7 +176,7 @@ modules:
       - upstream: /
         method: GET
         use: downstream
-        downstream: localisation-service/locations
+        downstream: localisation/locations
         auth: true
         onSuccess:
           data: response.data.items
@@ -184,19 +184,19 @@ modules:
       - upstream: /{locationId}
         method: GET
         use: downstream
-        downstream: localisation-service/locations/{locationId}
+        downstream: localisation/locations/{locationId}
         auth: true
 
       - upstream: /
         method: POST
         use: downstream
-        downstream: localisation-service/locations
+        downstream: localisation/locations
         auth: true
         resourceId:
           property: locationId
           generate: true
 
     services:
-      vehicles-service:
+      vehicles:
         localUrl: ubuntu-docker-host:5011
-        url: localisation-service
+        url: localisation
