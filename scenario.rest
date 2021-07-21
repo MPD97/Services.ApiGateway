@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ### Authenticate and grab the access token
 # @name sign_in
-POST {{api}}/sign-in
+POST {{api}}/identity/sign-in
 Content-Type: application/json
 
 {
@@ -22,50 +22,52 @@ Content-Type: application/json
   "password": "secret"
 }
 
-### Get your user account details
+### Get your identity account details
 # @name me
 @accessToken = {{sign_in.response.body.$.accessToken}}
 @refreshToken = {{sign_in.response.body.$.refreshToken}}
-GET {{api}}/me
+GET {{api}}/identity/me
 Authorization: Bearer {{accessToken}}
 
 
 
-### Complete the customer registration process
+### Complete the user registration process
 @userId = {{me.response.body.$.id}}
-POST http://ubuntu-docker-host:5012/users
+POST {{api}}/users
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "userId": "{{userId}}",
   "fullName": "John Doe",
   "address": "New York"
 }
 
-### Revoke access token
-POST {{api}}/access-tokens/revoke
+### Get your user account details
+GET {{api}}/users/me
+Authorization: Bearer {{accessToken}}
+
+
+### Add your GPS location
+# @name add_location
+POST {{api}}/locations
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "accesstoken": "{{accessToken}}"
+  "latitude" : 50.123,
+  "longitude" : 20.123,
+  "accuracy" : 150
 }
 
-### Renew access token using refresh token
-# @name renew
-POST {{api}}/refresh-tokens/use
+
+### Add new route
+# @name add_route
+POST {{api}}/routes
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "refreshToken": "{{refreshToken}}"
-}
-
-
-### Revoke refresh token
-@refreshToken = {{renew.response.body.$.refreshToken}}
-POST {{api}}/refresh-tokens/revoke
-Content-Type: application/json
-
-{
-  "refreshToken": "{{refreshToken}}"
+  "latitude" : 50.123,
+  "longitude" : 20.123,
+  "accuracy" : 150
 }
