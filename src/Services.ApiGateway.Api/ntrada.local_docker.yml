@@ -177,6 +177,8 @@ modules:
         use: downstream
         downstream: localisation-service/locations
         auth: true
+        claims:
+          role: admin
         onSuccess:
           data: response.data.items
 
@@ -185,11 +187,15 @@ modules:
         use: downstream
         downstream: localisation-service/locations/{locationId}
         auth: true
+        claims:
+          role: admin
 
       - upstream: /
         method: POST
         use: downstream
         downstream: localisation-service/locations
+        bind:
+          - userId:@user_id
         auth: true
         resourceId:
           property: locationId
@@ -199,3 +205,36 @@ modules:
       localisation-service:
         localUrl: localhost:5011
         url: localisation-service
+
+  routes:
+    path: routes
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: route-service/routes
+        auth: true
+        onSuccess:
+          data: response.data.items
+  
+      - upstream: /{routeId}
+        method: GET
+        use: downstream
+        downstream: route-service/routes/{routeId}
+        auth: true
+  
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: route-service/routes
+        bind:
+          - userId:@user_id
+        auth: true
+        routeId:
+          property: routeId
+          generate: true
+  
+    services:
+      route-service:
+        localUrl: localhost:5013
+        url: route-service
