@@ -18,7 +18,7 @@ POST {{api}}/identity/sign-in
 Content-Type: application/json
 
 {
-  "email": "scenario-user1@domain.com",
+  "email": "scenario-user2@domain.com",
   "password": "secret"
 }
 
@@ -28,7 +28,6 @@ Content-Type: application/json
 @refreshToken = {{sign_in.response.body.$.refreshToken}}
 GET {{api}}/identity/me
 Authorization: Bearer {{accessToken}}
-
 
 
 ### Complete the user registration process
@@ -67,7 +66,52 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "latitude" : 50.123,
-  "longitude" : 20.123,
-  "accuracy" : 150
+  "name": "Casual running route5",
+  "description": "",
+  "difficulty": "green",
+  "activityKind": 15,
+  "points":[
+      {
+      "order": 3,
+      "latitude": 50.003,
+      "longitude": 20.003,
+      "radius": 30
+    },
+    {
+      "order": 2,
+      "latitude": 50.002,
+      "longitude": 20.002,
+      "radius": 10
+    },
+    {
+      "order": 1,
+      "latitude": 50.001,
+      "longitude": 20.001,
+      "radius": 10
+    },
+    {
+      "order": 0,
+      "latitude": 50.000,
+      "longitude": 20.000,
+      "radius": 10
+    }
+  ]
+}
+
+### Get route
+# @name get_route
+@getRoute = {{add_route.response.headers.Location}}
+GET {{api}}/{{getRoute}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+
+### Change route status to accepted
+@routeId = {{get_route.response.body.$.id}}
+PUT {{api}}/routes/{{routeId}}/status/accepted
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+
 }
