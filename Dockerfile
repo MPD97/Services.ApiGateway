@@ -8,5 +8,6 @@ WORKDIR /app
 COPY --from=build /publish/out .
 ENV ASPNETCORE_ENVIRONMENT local_docker
 ENV NTRADA_CONFIG ntrada.local_docker.yml
-ENV ASPNETCORE_URLS http://*:80
+ENV ASPNETCORE_URLS https://*:443
+ENV ASPNETCORE_HTTPS_PORT 443
 ENTRYPOINT dotnet Services.ApiGateway.Api.dll
