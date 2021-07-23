@@ -70,9 +70,9 @@ modules:
         method: GET
         use: return_value
         returnValue: Welcome to Thesis API!
-          
+        
   users:
-    path: users
+    path: /users
     routes:
       - upstream: /
         method: GET
@@ -131,7 +131,7 @@ modules:
         url: users-service
       
   identity:
-    path: identity
+    path: /identity
     routes:
       - upstream: /users/{userId}
         method: GET
@@ -170,7 +170,7 @@ modules:
         url: identity-service
 
   locations:
-    path: locations
+    path: /locations
     routes:
       - upstream: /
         method: GET
@@ -207,21 +207,19 @@ modules:
         url: localisation-service
 
   routes:
-    path: routes
+    path: /routes
     routes:
       - upstream: /
         method: GET
         use: downstream
         downstream: route-service/routes
-        auth: true
-        onSuccess:
-          data: response.data.items
+        auth: false
   
       - upstream: /{routeId}
         method: GET
         use: downstream
         downstream: route-service/routes/{routeId}
-        auth: true
+        auth: false
   
       - upstream: /
         method: POST
@@ -230,10 +228,19 @@ modules:
         bind:
           - userId:@user_id
         auth: true
-        routeId:
+        resourceId:
           property: routeId
           generate: true
-  
+          
+      - upstream: /{routeId}/status/{status}
+        method: PUT
+        use: downstream
+        downstream: route-service/routes/{routeId}/status/{status}
+        bind:
+          - routeId:{routeId}
+          - status:{status}
+        auth: true
+
     services:
       route-service:
         localUrl: localhost:5013
