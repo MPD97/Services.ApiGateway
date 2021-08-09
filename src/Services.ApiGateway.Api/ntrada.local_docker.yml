@@ -92,9 +92,7 @@ modules:
         method: GET
         use: downstream
         downstream: users-service/users/{userId}
-        auth: true
-        claims:
-          role: admin
+        auth: false
     
       - upstream: /{userId}/state
         method: GET
@@ -124,7 +122,15 @@ modules:
         auth: true
         claims:
           role: admin
-    
+
+      - upstream: /{userId}/lock
+        method: PUT
+        use: downstream
+        downstream: users-service/users/{userId}/lock
+        auth: true
+        claims:
+          role: admin
+          
     services:
       users-service:
         localUrl: localhost:5012
@@ -163,6 +169,12 @@ modules:
         auth: false
         responseHeaders:
           content-type: application/json
+
+      - upstream: /refresh-tokens/use
+        method: POST
+        use: downstream
+        downstream: identity-service/refresh-tokens/use
+        auth: false
     
     services:
       identity-service:
@@ -245,3 +257,91 @@ modules:
       route-service:
         localUrl: localhost:5013
         url: route-service
+        
+  runs:
+    path: /runs
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: run-service/runs
+        auth: false
+
+      - upstream: /{runId}
+        method: GET
+        use: downstream
+        downstream: run-service/runs/{runId}
+        auth: false
+
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: run-service/runs
+        bind:
+          - userId:@user_id
+        auth: true
+        resourceId:
+          property: runId
+          generate: true
+
+    services:
+      run-service:
+        localUrl: localhost:5014
+        url: run-service
+
+  score:
+    path: /scores
+    routes:
+      - upstream: /{userId}
+        method: GET
+        use: downstream
+        downstream: score-service/scores/{userId}
+        auth: false
+        
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: score-service/scores
+        auth: false
+
+    services:
+      score-service:
+        localUrl: localhost:5015
+        url: score-service
+        
+  achievement:
+    path: /achievements
+    routes:
+      - upstream: /{userId}
+        method: GET
+        use: downstream
+        downstream: achievement-service/achievements/{userId}
+        bind:
+          - userId:@user_id
+        auth: false
+
+    services:
+      achievement-service:
+        localUrl: localhost:5016
+        url: achievement-service
+
+  resource:
+    path: /resources
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: resource-service/resources
+
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: resource-service/resources
+        bind:
+          - userId:@user_id
+        auth: true
+
+    services:
+      resource-service:
+        localUrl: localhost:5017
+        url: resource-service

@@ -195,8 +195,17 @@ modules:
         resourceId:
           property: locationId
           generate: true
+          
+  score:
+    path: score
+    routes:
+      - upstream: /{userId}
+        method: GET
+        use: downstream
+        downstream: score/{userId}
+        auth: false
 
     services:
       vehicles:
         localUrl: ubuntu-docker-host:5011
-        url: localisation
+        url: score
