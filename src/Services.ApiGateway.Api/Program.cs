@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using Ntrada.Hooks;
-using Pacco.APIGateway.Infrastructure;
+using Services.ApiGateway.Api.Infrastructure;
 
 namespace Services.ApiGateway.Api
 {

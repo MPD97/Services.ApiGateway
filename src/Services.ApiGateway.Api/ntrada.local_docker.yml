@@ -8,7 +8,8 @@ http:
   retries: 2
   interval: 2.0
   exponential: true
-
+  
+useErrorHandler: true
 useForwardedHeaders: true
 passQueryString: true
 forwardRequestHeaders: true
@@ -44,7 +45,7 @@ extensions:
     issuerSigningKey: eiquief5phee9pazo0Faegaez9gohThailiur5woy2befiech1oarai4aiLi6ahVecah3ie9Aiz6Peij
     validIssuer: organisation
     validateAudience: false
-    validateIssuer: false
+    validateIssuer: true
     validateLifetime: true
 
   swagger:
@@ -111,7 +112,7 @@ modules:
         auth: true
         payload: create_user
         schema: create_user.schema
-    
+        
       - upstream: /{userId}/state/{state}
         method: PUT
         use: downstream
@@ -122,15 +123,15 @@ modules:
         auth: true
         claims:
           role: admin
-
+          
       - upstream: /{userId}/lock
         method: PUT
         use: downstream
         downstream: users-service/users/{userId}/lock
+        bind:
+          - userId:{userId}
         auth: true
-        claims:
-          role: admin
-          
+
     services:
       users-service:
         localUrl: localhost:5012
@@ -298,6 +299,12 @@ modules:
         downstream: score-service/scores/{userId}
         auth: false
         
+      - upstream: /ranking/{userId}
+        method: GET
+        use: downstream
+        downstream: score-service/scores/ranking/{userId}
+        auth: false
+          
       - upstream: /
         method: GET
         use: downstream

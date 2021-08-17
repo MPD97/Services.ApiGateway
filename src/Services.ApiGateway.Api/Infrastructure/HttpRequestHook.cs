@@ -5,7 +5,7 @@ using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using Ntrada.Hooks;
 
-namespace Pacco.APIGateway.Infrastructure
+namespace Services.ApiGateway.Api.Infrastructure
 {
     internal sealed class HttpRequestHook : IHttpRequestHook
     {
@@ -21,7 +21,7 @@ namespace Pacco.APIGateway.Infrastructure
         {
             var context = JsonConvert.SerializeObject(_contextBuilder.Build(data));
             request.Headers.TryAddWithoutValidation("Correlation-Context", context);
-            
+
             return Task.CompletedTask;
         }
     }

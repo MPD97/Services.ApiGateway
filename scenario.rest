@@ -7,9 +7,9 @@ POST {{api}}/identity/sign-up
 Content-Type: application/json; charset=utf-8
 
 {
-  "email": "admin10@wp.pl",
+  "email": "user5@wp.pl",
   "password": "1qaz2wsx",
-  "role": "admin"
+  "role": "user"
 }
 
 ### Authenticate and grab the access token
@@ -18,8 +18,8 @@ POST {{api}}/identity/sign-in
 Content-Type: application/json
 
 {
-  "email": "mateusz2@wp.pl",
-  "password": "1qaz"
+  "email": "user5@wp.pl",
+  "password": "1qaz2wsx"
 }
 
 ### Get your identity account details
@@ -148,13 +148,16 @@ GET {{api}}/scores/{{userId}}
 Content-Type: application/json
 
 ### Get all users score
-GET {{api}}/scores/
+GET {{api}}/scores?orderBy=score&sortOrder=desc
+Content-Type: application/json
+
+### Get user place in ranking
+Get  {{api}}/scores/ranking/{{userId}}
 Content-Type: application/json
 
 ### Get my achievements
 GET {{api}}/achievements/{{userId}}
 Content-Type: application/json
-
 
 ### Get ranking
 GET {{api}}/runs?RouteId=d92a7e97-0895-40a5-8428-e03fc02e0559&orderBy=time&sortOrder=asc

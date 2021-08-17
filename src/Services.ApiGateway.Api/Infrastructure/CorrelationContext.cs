@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Pacco.APIGateway.Infrastructure
+namespace Services.ApiGateway.Api.Infrastructure
 {
     internal class CorrelationContext
     {

@@ -4,7 +4,7 @@ using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using OpenTracing;
 
-namespace Pacco.APIGateway.Infrastructure
+namespace Services.ApiGateway.Api.Infrastructure
 {
     internal sealed class SpanContextBuilder : ISpanContextBuilder
     {

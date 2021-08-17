@@ -6,7 +6,7 @@ using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using OpenTracing;
 
-namespace Pacco.APIGateway.Infrastructure
+namespace Services.ApiGateway.Api.Infrastructure
 {
     internal sealed class CorrelationContextBuilder : IContextBuilder
     {
@@ -24,7 +24,7 @@ namespace Pacco.APIGateway.Infrastructure
                 tracer.ActiveSpan is null ? string.Empty : tracer.ActiveSpan.Context.ToString();
 
             var name = string.Empty;
-            if (executionData.Route.Config is {} &&
+            if (executionData.Route.Config is { } &&
                 executionData.Route.Config.TryGetValue("routing_key", out var routingKey))
             {
                 name = routingKey ?? string.Empty;
