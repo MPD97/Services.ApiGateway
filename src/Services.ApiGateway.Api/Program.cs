@@ -42,7 +42,6 @@ namespace Services.ApiGateway.Api
                             .AddSingleton<ISpanContextBuilder, SpanContextBuilder>()
                             .AddSingleton<IHttpRequestHook, HttpRequestHook>()
                             .AddConvey()
-                            .AddMetrics()
                             .AddSecurity())
                         .Configure(app => app.UseNtrada())
                         .UseLogging();
