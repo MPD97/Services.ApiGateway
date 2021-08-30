@@ -22,9 +22,6 @@
       <None Update="ntrada.local_docker.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="ntrada.remote.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
     
 </Project>
